@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import {
@@ -22,6 +22,7 @@ import {
   useCreateReviewMutation,
 } from '../slices/productsApiSlice';
 import { addToCart } from '../slices/cartSlice';
+import ImageZoom from 'js-image-zoom';
 
 const ProductScreen = () => {
   const { id: productId } = useParams();
@@ -67,6 +68,18 @@ const ProductScreen = () => {
     }
   };
 
+  var options = {
+    //width: 400,
+    //zoomWidth: 500,
+    //fillContainer: true,
+    scale: 1,
+    offset: { vertical: 0, horizontal: 0 },
+  };
+
+  useEffect(() => {
+    new ImageZoom(document.getElementById('first'), options);
+  });
+
   return (
     <>
       <Link className='btn btn-light my-3' to='/'>
@@ -82,8 +95,15 @@ const ProductScreen = () => {
         <>
           <Meta title={product.name} />
           <Row>
-            <Col md={5}>
-              <Image src={product.image} alt={product.name} fluid />
+            <Col style={{ zIndex: 1 }} md={5}>
+              <div id='first'>
+                <Image
+                  crossOrigin='anonymous'
+                  src={product.image}
+                  alt={product.name}
+                  fluid
+                />
+              </div>
             </Col>
             <Col md={4}>
               <ListGroup variant='flush'>

@@ -7,6 +7,7 @@ import { useLogoutMutation } from '../slices/usersApiSlice';
 import { logout } from '../slices/authSlice';
 import SearchBox from './SearchBox';
 import logo from '../assets/logo.png';
+import { resetCart } from '../slices/cartSlice';
 
 const Header = () => {
   const { cartItems } = useSelector((state) => state.cart);
@@ -21,6 +22,7 @@ const Header = () => {
     try {
       await logoutApiCall().unwrap();
       dispatch(logout());
+      dispatch(resetCart());
       navigate('/login');
     } catch (err) {
       console.log(err);
@@ -34,7 +36,7 @@ const Header = () => {
           <LinkContainer to='/'>
             <Navbar.Brand>
               <img src={logo} alt='Logistics Support Command' />
-              &nbsp; &nbsp; AFP LOGISTICS SUPPORT COMMAND
+              &nbsp; &nbsp; SUPPLY GROUP, AFP LOGISTICS SUPPORT COMMAND
             </Navbar.Brand>
           </LinkContainer>
           <Navbar.Toggle aria-controls='basic-navbar-nav'></Navbar.Toggle>
@@ -53,7 +55,7 @@ const Header = () => {
               </LinkContainer>
               {userInfo && userInfo.isAdmin ? (
                 <>
-                  <NavDropdown title='Admin' id='adminmenu'>
+                  <NavDropdown title={userInfo.name} id='adminmenu'>
                     <LinkContainer to='/admin/productlist'>
                       <NavDropdown.Item>Products</NavDropdown.Item>
                     </LinkContainer>
@@ -72,16 +74,35 @@ const Header = () => {
                   </NavDropdown>
                 </>
               ) : userInfo ? (
-                <>
-                  <NavDropdown title={userInfo.name} id='username'>
-                    <LinkContainer to='/profile'>
-                      <NavDropdown.Item>Profile</NavDropdown.Item>
-                    </LinkContainer>
-                    <NavDropdown.Item onClick={logoutHandler}>
-                      Logout
-                    </NavDropdown.Item>
-                  </NavDropdown>
-                </>
+                userInfo && userInfo.isManager ? (
+                  <>
+                    <NavDropdown title={userInfo.name} id='username'>
+                      <LinkContainer to='/stockAdmin/stocklist'>
+                        <NavDropdown.Item>Stocks</NavDropdown.Item>
+                      </LinkContainer>
+                      <LinkContainer to='/stockAdmin/uploadExcel'>
+                        <NavDropdown.Item>Upload Excel File</NavDropdown.Item>
+                      </LinkContainer>
+                      <LinkContainer to='/profile'>
+                        <NavDropdown.Item>Profile</NavDropdown.Item>
+                      </LinkContainer>
+                      <NavDropdown.Item onClick={logoutHandler}>
+                        Logout
+                      </NavDropdown.Item>
+                    </NavDropdown>
+                  </>
+                ) : (
+                  <>
+                    <NavDropdown title={userInfo.name} id='username'>
+                      <LinkContainer to='/profile'>
+                        <NavDropdown.Item>Profile</NavDropdown.Item>
+                      </LinkContainer>
+                      <NavDropdown.Item onClick={logoutHandler}>
+                        Logout
+                      </NavDropdown.Item>
+                    </NavDropdown>
+                  </>
+                )
               ) : (
                 <LinkContainer to='/login'>
                   <Nav.Link>

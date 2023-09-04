@@ -97,7 +97,7 @@ const UserEditScreen = () => {
             <Form.Group controlId='isManager' className='my-2'>
               <Form.Check
                 type='checkbox'
-                label='Is Manager'
+                label='Is Stocks Admin'
                 checked={isManager}
                 onChange={(e) => setIsManager(e.target.checked)}
               ></Form.Check>

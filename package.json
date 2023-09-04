@@ -36,7 +36,8 @@
     "scheduler": "^0.23.0",
     "tslib": "^2.5.2",
     "uncontrollable": "^7.2.1",
-    "warning": "^4.0.3"
+    "warning": "^4.0.3",
+    "xlsx": "^0.18.5"
   },
   "scripts": {
     "start": "node backend/server.js",
@@ -44,7 +45,9 @@
     "client": "npm start --prefix frontend",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "data:import": "node backend/seeder.js",
-    "data:destroy": "node backend/seeder.js -d"
+    "data:destroy": "node backend/seeder.js -d",
+    "data:importstock": "node backend/seader.js",
+    "data:destroystock": "node backend/seader.js -d"
   },
   "author": "Jhun Gulle",
   "license": "MIT",

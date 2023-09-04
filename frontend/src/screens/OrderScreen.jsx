@@ -61,7 +61,7 @@ const OrderScreen = () => {
   function onApprove(data, actions) {
     return actions.order.capture().then(async function (details) {
       try {
-        await payOrder({ orderId, details });
+        await payOrder({ orderId, details }).unwrap();
         refetch();
         toast.success('Payment successful');
       } catch (err) {
@@ -70,11 +70,14 @@ const OrderScreen = () => {
     });
   }
 
-  async function onApproveTest() {
-    await payOrder({ orderId, details: { payer: {} } });
-    refetch();
-    toast.success('Payment successful');
-  }
+  //Payment OptionNoPaypal
+  // async function onApproveTest() {
+  //   await payOrder({ orderId, details: { payer: {} } });
+  //   refetch();
+  //   //toast.success('Payment successful');
+  //   toast.success('Orders posted!');
+  // }
+  //Payment OptionNoPaypal
 
   function onError(err) {
     toast.error(err.message);
@@ -109,7 +112,7 @@ const OrderScreen = () => {
   return isLoading ? (
     <Loader />
   ) : error ? (
-    <Message variant='danger' />
+    <Message variant='danger'>{error?.data?.message || error.error}</Message>
   ) : (
     <>
       <h1>Order # {order._id}</h1>
@@ -137,7 +140,7 @@ const OrderScreen = () => {
                 <Message variant='danger'>Not Delivered</Message>
               )}
             </ListGroup.Item>
-
+            {/* PAYPAL Payment */}
             <ListGroup.Item>
               <h2>Payment Method</h2>
               <p>
@@ -149,7 +152,7 @@ const OrderScreen = () => {
                 <Message variant='danger'>Not Paid</Message>
               )}
             </ListGroup.Item>
-
+            {/* PAYPAL Payment */}
             <ListGroup.Item>
               <h2>Order Items</h2>
               {order.orderItems.map((item, index) => (
@@ -161,7 +164,7 @@ const OrderScreen = () => {
                     <Col to={`/product/${item.product}`}>{item.name}</Col>
                     <Col md={4}>
                       {item.qty} x {item.price} = <span>&#8369;</span>{' '}
-                      {item.qty * item.price}
+                      {(item.qty * item.price).toFixed(2)}
                     </Col>
                   </Row>
                 </ListGroup.Item>
@@ -210,12 +213,17 @@ const OrderScreen = () => {
                     <Loader />
                   ) : (
                     <div>
-                      {/*<Button
+                      {/* Payment Option_noPaypal */}
+                      {/* 
+                      <Button
                         onClick={onApproveTest}
                         style={{ marginBottom: '10px' }}
                       >
-                        Test Pay Order
-                      </Button>*/}
+                        Finalize Order
+                      </Button>
+                       */}
+                      {/* Payment Option_noPaypal */}
+                      {/* PAYPAL Payment */}
                       <div>
                         <PayPalButtons
                           createOrder={createOrder}
@@ -223,6 +231,7 @@ const OrderScreen = () => {
                           onError={onError}
                         ></PayPalButtons>
                       </div>
+                      {/* PAYPAL Payment */}
                     </div>
                   )}
                 </ListGroup.Item>

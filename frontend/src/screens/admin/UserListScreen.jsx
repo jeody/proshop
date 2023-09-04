@@ -66,7 +66,7 @@ const UserListScreen = () => {
               <td>NAME</td>
               <td>EMAIL</td>
               <td>ADMIN</td>
-              <td>MANAGER</td>
+              <td>StocksAdmin</td>
               <td></td>
             </tr>
           </thead>

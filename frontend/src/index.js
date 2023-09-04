@@ -27,16 +27,19 @@ import PlaceOrderScreen from './screens/PlaceOrderScreen';
 import OrderScreen from './screens/OrderScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import ProductListScreen from './screens/admin/ProductListScreen';
+import StockListScreen from './screens/manager/StockListScreen';
+import StockEditScreen from './screens/manager/StockEditScreen';
 import UserListScreen from './screens/admin/UserListScreen';
 import UserEditScreen from './screens/admin/UserEditScreen';
 import OrderListScreen from './screens/admin/OrderListScreen';
 import ProductEditScreen from './screens/admin/ProductEditScreen';
 import AdminRoute from './components/AdminRoute';
+import ManagerRoute from './components/ManagerRoute';
+import UploadExcelFileScreen from './screens/manager/UploadExcelFileScreen';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<App />}>
-      <Route index={true} path='/' element={<HomeScreen />} />
       <Route path='/search/:keyword' element={<HomeScreen />} />
       <Route path='/page/:pageNumber' element={<HomeScreen />} />
       <Route
@@ -46,14 +49,25 @@ const router = createBrowserRouter(
       <Route path='/product/:id' element={<ProductScreen />} />
       <Route path='/cart' element={<CartScreen />} />
       <Route path='/login' element={<LoginScreen />} />
-      <Route path='/register' element={<RegisterScreen />} />
-
       <Route path='' element={<PrivateRoute />}>
+        <Route index={true} path='/' element={<HomeScreen />} />
+        <Route path='/register' element={<RegisterScreen />} />
         <Route path='/shipping' element={<ShippingScreen />} />
         <Route path='/payment' element={<PaymentScreen />} />
         <Route path='/placeorder' element={<PlaceOrderScreen />} />
         <Route path='/order/:id' element={<OrderScreen />} />
         <Route path='/profile' element={<ProfileScreen />} />
+      </Route>
+      <Route path='' element={<ManagerRoute />}>
+        <Route path='/stockAdmin/stocklist' element={<StockListScreen />} />
+        <Route
+          path='/stockAdmin/uploadExcel'
+          element={<UploadExcelFileScreen />}
+        />
+        <Route
+          path='/stockAdmin/stock/:id/edit'
+          element={<StockEditScreen />}
+        />
       </Route>
       <Route path='' element={<AdminRoute />}>
         <Route path='/admin/productlist' element={<ProductListScreen />} />

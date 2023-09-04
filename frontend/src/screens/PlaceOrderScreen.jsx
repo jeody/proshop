@@ -58,13 +58,13 @@ const PlaceOrderScreen = () => {
                 {cart.shippingAddress.country}
               </p>
             </ListGroup.Item>
-
+            {/* Payment Method */}
             <ListGroup.Item>
               <h2>Payment Method</h2>
               <strong>Method: </strong>
               {cart.paymentMethod}
             </ListGroup.Item>
-
+            {/* Payment Method */}
             <ListGroup.Item>
               <h2>Order Items</h2>
               {cart.cartItems.length === 0 ? (
@@ -140,7 +140,9 @@ const PlaceOrderScreen = () => {
               </ListGroup.Item>
 
               <ListGroup.Item>
-                {error && <Message variant='danger'>{error}</Message>}
+                {error && (
+                  <Message variant='danger'>{error.data.message}</Message>
+                )}
               </ListGroup.Item>
 
               <ListGroup.Item>

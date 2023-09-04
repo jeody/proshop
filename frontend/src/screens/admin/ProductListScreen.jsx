@@ -11,6 +11,7 @@ import {
   useCreateProductMutation,
   useDeleteProductMutation,
 } from '../../slices/productsApiSlice';
+import { useState } from 'react';
 
 const ProductListScreen = () => {
   const { pageNumber } = useParams();
@@ -52,11 +53,11 @@ const ProductListScreen = () => {
     <>
       <Row>
         <Col>
-          <h1>Products</h1>
+          <h1>Available Items</h1>
         </Col>
         <Col className='text-end'>
           <Button className='btb-sm m-3' onClick={createProductHandler}>
-            <FaEdit /> Create Product
+            <FaEdit /> Add New Item
           </Button>
         </Col>
       </Row>
@@ -67,14 +68,16 @@ const ProductListScreen = () => {
       {isLoading ? (
         <Loader />
       ) : error ? (
-        <Message variant='danger'>{error}</Message>
+        <Message variant='danger'>{error.data.message}</Message>
       ) : (
         <>
           <Table striped hover responsive className='table-sm'>
             <thead>
               <tr>
+                <th>#</th>
                 <th>ID</th>
-                <th>NAME</th>
+                <th>NOMENCLATURE</th>
+                <th>countInStock</th>
                 <th>PRICE</th>
                 <th>CATEGORY</th>
                 <th>BRAND</th>
@@ -82,10 +85,12 @@ const ProductListScreen = () => {
               </tr>
             </thead>
             <tbody>
-              {data.products.map((product) => (
+              {data.products.map((product, index) => (
                 <tr key={product._id}>
+                  <td>{index + 1}.</td>
                   <td>{product._id}</td>
                   <td>{product.name}</td>
+                  <td>{product.countInStock}</td>
                   <td>
                     <span>&#8369;</span>
                     {product.price}

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Form, Button, Row, Col } from 'react-bootstrap';
+import { Form, Button, Row, Col, Image } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import FormContainer from '../components/FormContainer';
 import Loader from '../components/Loader';
@@ -50,7 +50,15 @@ const RegisterScreen = () => {
   return (
     <FormContainer>
       <h1>Sign Up</h1>
-
+      <center>
+        <Image
+          src='../../../uploads/lsc_logo.png'
+          width='30%'
+          alt='Logistics Support Command'
+          fluid
+          rounded
+        />
+      </center>
       <Form onSubmit={submitHandler}>
         <Form.Group controlId='name' className='my-3'>
           <Form.Label>Name</Form.Label>

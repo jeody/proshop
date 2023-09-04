@@ -35,4 +35,14 @@ const admin = (req, res, next) => {
   }
 };
 
-export { protect, admin };
+// StockAdmin middleware
+const stockAdmin = (req, res, next) => {
+  if (req.user && req.user.isManager) {
+    next();
+  } else {
+    res.status(401);
+    throw new Error('Not authorized as Stock admin');
+  }
+};
+
+export { protect, admin, stockAdmin };
