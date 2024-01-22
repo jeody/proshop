@@ -21,6 +21,7 @@ const ProductEditScreen = () => {
   const [category, setCategory] = useState('');
   const [countInStock, setCountInStock] = useState(0);
   const [description, setDescription] = useState('');
+  const [warehouse, setWarehouse] = useState(0);
 
   const {
     data: product,
@@ -45,6 +46,7 @@ const ProductEditScreen = () => {
       setCategory(product.category);
       setCountInStock(product.countInStock);
       setDescription(product.description);
+      setWarehouse(product.warehouse);
     }
   }, [product]);
 
@@ -59,6 +61,7 @@ const ProductEditScreen = () => {
       category,
       countInStock,
       description,
+      warehouse,
     };
 
     const result = await updateProduct(updatedProduct);
@@ -172,6 +175,23 @@ const ProductEditScreen = () => {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='warehouse' className='my-2'>
+              <Form.Label>Warehouse</Form.Label>
+              <Form.Control
+                as='select'
+                value={warehouse}
+                onChange={(e) => setWarehouse(Number(e.target.value))}
+              >
+                <option value='0'>Select...</option>
+                <option value='1'>Warehouse 1</option>
+                <option value='2'>Warehouse 2</option>
+                <option value='3'>Warehouse 3</option>
+                <option value='4'>Warehouse 4</option>
+                <option value='5'>Warehouse 5</option>
+                <option value='6'>Warehouse 6</option>
+              </Form.Control>
             </Form.Group>
 
             <Button type='submit' variant='primary' className='my-2'>

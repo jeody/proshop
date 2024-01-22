@@ -11,7 +11,7 @@ import {
   useCreateProductMutation,
   useDeleteProductMutation,
 } from '../../slices/productsApiSlice';
-import { useState } from 'react';
+//import { useState } from 'react';
 
 const ProductListScreen = () => {
   const { pageNumber } = useParams();
@@ -75,7 +75,6 @@ const ProductListScreen = () => {
             <thead>
               <tr>
                 <th>#</th>
-                <th>ID</th>
                 <th>NOMENCLATURE</th>
                 <th>countInStock</th>
                 <th>PRICE</th>
@@ -88,12 +87,13 @@ const ProductListScreen = () => {
               {data.products.map((product, index) => (
                 <tr key={product._id}>
                   <td>{index + 1}.</td>
-                  <td>{product._id}</td>
                   <td>{product.name}</td>
                   <td>{product.countInStock}</td>
                   <td>
-                    <span>&#8369;</span>
+                    <span>&#8369; 0.00</span>
+                    {/*
                     {product.price}
+              */}
                   </td>
                   <td>{product.category}</td>
                   <td>{product.brand}</td>

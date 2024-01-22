@@ -36,6 +36,9 @@ import ProductEditScreen from './screens/admin/ProductEditScreen';
 import AdminRoute from './components/AdminRoute';
 import ManagerRoute from './components/ManagerRoute';
 import UploadExcelFileScreen from './screens/manager/UploadExcelFileScreen';
+import AdminStockList from './screens/manager/AdminStockList';
+import OpenWarehouse from './screens/OpenWarehouse';
+import IssueDirectiveScreen from './screens/IssueDirectiveScreen';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -49,6 +52,7 @@ const router = createBrowserRouter(
       <Route path='/product/:id' element={<ProductScreen />} />
       <Route path='/cart' element={<CartScreen />} />
       <Route path='/login' element={<LoginScreen />} />
+      <Route path='/directive' element={<IssueDirectiveScreen />} />
       <Route path='' element={<PrivateRoute />}>
         <Route index={true} path='/' element={<HomeScreen />} />
         <Route path='/register' element={<RegisterScreen />} />
@@ -56,10 +60,27 @@ const router = createBrowserRouter(
         <Route path='/payment' element={<PaymentScreen />} />
         <Route path='/placeorder' element={<PlaceOrderScreen />} />
         <Route path='/order/:id' element={<OrderScreen />} />
+        <Route path='/warehouse/:id' element={<OpenWarehouse />} />
+        <Route
+          path='/warehouse/:id/page/:pageNumber'
+          element={<OpenWarehouse />}
+        />
         <Route path='/profile' element={<ProfileScreen />} />
       </Route>
       <Route path='' element={<ManagerRoute />}>
         <Route path='/stockAdmin/stocklist' element={<StockListScreen />} />
+        <Route
+          path='/stockAdmin/stocklist/page/:pageNumber'
+          element={<StockListScreen />}
+        />
+        <Route
+          path='/stockAdmin/stocklist/mylist/page/:pageNumber'
+          element={<AdminStockList />}
+        />
+        <Route
+          path='/stockAdmin/stocklist/mylist'
+          element={<AdminStockList />}
+        />
         <Route
           path='/stockAdmin/uploadExcel'
           element={<UploadExcelFileScreen />}
@@ -79,6 +100,11 @@ const router = createBrowserRouter(
         <Route path='/admin/orderlist' element={<OrderListScreen />} />
         <Route path='/admin/product/:id/edit' element={<ProductEditScreen />} />
         <Route path='/admin/user/:id/edit' element={<UserEditScreen />} />
+        <Route path='/admin/stocklist' element={<StockListScreen />} />
+        <Route
+          path='/admin/stocklist/:pageNumber'
+          element={<StockListScreen />}
+        />
       </Route>
     </Route>
   )

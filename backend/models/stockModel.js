@@ -11,63 +11,103 @@ const stockSchema = mongoose.Schema(
     },
     nomenclature: {
       type: String,
-      required: true,
+      trim: true,
     },
     serialNumber: {
       type: String,
-      required: true,
     },
     makeBrand: {
       type: String,
-      required: true,
     },
     unitItem: {
       type: String,
-      required: true,
     },
     boxNumber: {
       type: String,
-      required: true,
     },
     location: {
       type: String,
-      required: true,
     },
     remarks: {
       type: String,
-      required: true,
-    },
-    source: {
-      type: String,
-      required: true,
     },
     dateInventory: {
       type: Date,
     },
     ptisNumber: {
       type: String,
-      required: true,
     },
     unitPrice: {
       type: Number,
-      required: true,
       default: 0,
     },
     qtyReceived: {
       type: Number,
+      default: 0,
+    },
+    qtyIssued: {
+      type: Number,
+      default: 0,
+    },
+    onHand: {
+      type: Number,
       required: true,
       default: 0,
     },
+    dateIssued: {
+      type: Date,
+    },
+    requisitioningUnit: {
+      type: String,
+    },
+    authority: {
+      type: String,
+    },
+    documentNumber: {
+      type: String,
+    },
     yearAcquired: {
       type: Date,
+      required: true,
+      default: Date.now,
+    },
+    source: {
+      type: String,
     },
     image: {
       type: String,
-      required: true,
     },
     category: {
       type: String,
+      trim: true,
+    },
+    partNumber: {
+      type: String,
+    },
+    sparePartOf: {
+      type: String,
+      trim: true,
+    },
+    isAdded: {
+      type: Boolean,
       required: true,
+      default: false,
+    },
+    fsc: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    niin: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    description: {
+      type: String,
+    },
+    warehouse: {
+      type: Number,
     },
   },
   {

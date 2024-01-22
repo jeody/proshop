@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Row, Col, ListGroup, Image, Button, Card } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
@@ -12,8 +12,12 @@ import {
   useGetPayPalClientIdQuery,
   useDeliverOrderMutation,
 } from '../slices/ordersApiSlice';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 const OrderScreen = () => {
+  const navigate = useNavigate();
+  const pdfRef = useRef();
   const { id: orderId } = useParams();
 
   const {
@@ -71,12 +75,12 @@ const OrderScreen = () => {
   }
 
   //Payment OptionNoPaypal
-  // async function onApproveTest() {
-  //   await payOrder({ orderId, details: { payer: {} } });
-  //   refetch();
-  //   //toast.success('Payment successful');
-  //   toast.success('Orders posted!');
-  // }
+  async function onApproveTest() {
+    await payOrder({ orderId, details: { payer: {} } });
+    refetch();
+    //toast.success('Payment successful');
+    toast.success('Orders posted!');
+  }
   //Payment OptionNoPaypal
 
   function onError(err) {
@@ -109,38 +113,69 @@ const OrderScreen = () => {
     }
   };
 
+  const downloadPDF = () => {
+    const input = pdfRef.current;
+    html2canvas(input).then((canvas) => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4', true);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      const imageWidth = canvas.width;
+      const imageHeight = canvas.height;
+      const ratio = Math.min(pdfWidth / imageWidth, pdfHeight / imageHeight);
+      const imgX = (pdfWidth - imageWidth * ratio) / 2;
+      const imgY = 30;
+      pdf.addImage(
+        imgData,
+        'PNG',
+        imgX,
+        imgY,
+        imageWidth * ratio,
+        imageHeight * ratio
+      );
+      pdf.save(`afplsc-Invoice.pdf`);
+    });
+  };
+
+  const uploadPermit = async () => {
+    navigate('/directive');
+  };
+
   return isLoading ? (
     <Loader />
   ) : error ? (
     <Message variant='danger'>{error?.data?.message || error.error}</Message>
   ) : (
     <>
-      <h1>Order # {order._id}</h1>
-      <Row>
-        <Col md={8}>
-          <ListGroup variant='flush'>
-            <ListGroup.Item>
-              <h2>Shipping</h2>
-              <p>
-                <strong>Name: </strong> {order.user.name}
-              </p>
-              <p>
-                <strong>Email: </strong> {order.user.email}
-              </p>
-              <p>
-                <strong>Address: </strong> {order.shippingAddress.address},{' '}
-                {order.shippingAddress.city} {order.shippingAddress.postalCode},{' '}
-                {order.shippingAddress.country}
-              </p>
-              {order.isDelivered ? (
-                <Message variant='success'>
-                  Delivered on {order.deliveredAt}
-                </Message>
-              ) : (
-                <Message variant='danger'>Not Delivered</Message>
-              )}
-            </ListGroup.Item>
-            {/* PAYPAL Payment */}
+      <div className='container' ref={pdfRef}>
+        <h1>Order # {order._id}</h1>
+        <Row>
+          <Col md={8}>
+            <ListGroup variant='flush'>
+              <ListGroup.Item>
+                <h2>Shipping</h2>
+                <p>
+                  <strong>Name: </strong> {order.user.name}
+                </p>
+                <p>
+                  <strong>Email: </strong> {order.user.email}
+                </p>
+                <p>
+                  <strong>Address: </strong> {order.shippingAddress.address},{' '}
+                  {order.shippingAddress.city}{' '}
+                  {order.shippingAddress.postalCode},{' '}
+                  {order.shippingAddress.country}
+                </p>
+                {order.isDelivered ? (
+                  <Message variant='success'>
+                    Delivered on {order.deliveredAt}
+                  </Message>
+                ) : (
+                  <Message variant='danger'>Not Delivered</Message>
+                )}
+              </ListGroup.Item>
+              {/* PAYPAL Payment */}
+              {/*
             <ListGroup.Item>
               <h2>Payment Method</h2>
               <p>
@@ -152,78 +187,94 @@ const OrderScreen = () => {
                 <Message variant='danger'>Not Paid</Message>
               )}
             </ListGroup.Item>
-            {/* PAYPAL Payment */}
-            <ListGroup.Item>
-              <h2>Order Items</h2>
-              {order.orderItems.map((item, index) => (
-                <ListGroup.Item key={index}>
+            */}
+              {/* PAYPAL Payment */}
+              <ListGroup.Item>
+                <h2>Order Items</h2>
+                {order.orderItems.map((item, index) => (
+                  <ListGroup.Item key={index}>
+                    <Row>
+                      <Col md={1}>
+                        <Image src={item.image} alt={item.name} fluid rounded />
+                      </Col>
+                      <Col to={`/product/${item.product}`}>{item.name}</Col>
+                      <Col md={4}>
+                        {item.qty} x 0.00 {/* {item.price} */} ={' '}
+                        <span>&#8369;</span>{' '}
+                        {(item.qty * item.price).toLocaleString('en-US')}
+                      </Col>
+                    </Row>
+                  </ListGroup.Item>
+                ))}
+              </ListGroup.Item>
+            </ListGroup>
+          </Col>
+          <Col md={4}>
+            <Card>
+              <ListGroup variant='flush'>
+                <ListGroup.Item>
+                  <h2>Order Summary</h2>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <Row>
-                    <Col md={1}>
-                      <Image src={item.image} alt={item.name} fluid rounded />
+                    <Col>Items:</Col>
+                    <Col>
+                      <span>&#8369;</span>
+                      {order.itemsPrice.toLocaleString('en-US')}
                     </Col>
-                    <Col to={`/product/${item.product}`}>{item.name}</Col>
-                    <Col md={4}>
-                      {item.qty} x {item.price} = <span>&#8369;</span>{' '}
-                      {(item.qty * item.price).toFixed(2)}
+                  </Row>
+                  <Row>
+                    <Col>Shipping:</Col>
+                    <Col>
+                      <span>&#8369;</span>
+                      {order.shippingPrice.toLocaleString('en-US')}
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>Tax:</Col>
+                    <Col>
+                      <span>&#8369;</span>
+                      {order.taxPrice.toLocaleString('en-US')}
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>Total:</Col>
+                    <Col>
+                      <span>&#8369;</span>
+                      {order.totalPrice.toLocaleString('en-US')}
                     </Col>
                   </Row>
                 </ListGroup.Item>
-              ))}
-            </ListGroup.Item>
-          </ListGroup>
-        </Col>
-        <Col md={4}>
-          <Card>
-            <ListGroup variant='flush'>
-              <ListGroup.Item>
-                <h2>Order Summary</h2>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Row>
-                  <Col>Items:</Col>
-                  <Col>
-                    <span>&#8369;</span> {order.itemsPrice}
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>Shipping:</Col>
-                  <Col>
-                    <span>&#8369;</span> {order.shippingPrice}
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>Tax:</Col>
-                  <Col>
-                    <span>&#8369;</span> {order.taxPrice}
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>Total:</Col>
-                  <Col>
-                    <span>&#8369;</span> {order.totalPrice}
-                  </Col>
-                </Row>
-              </ListGroup.Item>
 
-              {!order.isPaid && (
-                <ListGroup.Item>
-                  {loadingPay && <Loader />}
+                {!order.isPaid && (
+                  <ListGroup.Item>
+                    {loadingPay && <Loader />}
 
-                  {isPending ? (
-                    <Loader />
-                  ) : (
-                    <div>
-                      {/* Payment Option_noPaypal */}
-                      {/* 
-                      <Button
-                        onClick={onApproveTest}
-                        style={{ marginBottom: '10px' }}
-                      >
-                        Finalize Order
-                      </Button>
-                       */}
-                      {/* Payment Option_noPaypal */}
-                      {/* PAYPAL Payment */}
+                    {isPending ? (
+                      <Loader />
+                    ) : (
+                      <div>
+                        {/* Payment Option_noPaypal */}
+                        {!order.isUpload ? (
+                          <Button
+                            onClick={onApproveTest}
+                            style={{ marginBottom: '10px' }}
+                            disabled
+                          >
+                            Finalize Order
+                          </Button>
+                        ) : (
+                          <Button
+                            onClick={onApproveTest}
+                            style={{ marginBottom: '10px' }}
+                          >
+                            Finalize Order
+                          </Button>
+                        )}
+
+                        {/* Payment Option_noPaypal */}
+                        {/* PAYPAL Payment */}
+                        {/*
                       <div>
                         <PayPalButtons
                           createOrder={createOrder}
@@ -231,14 +282,27 @@ const OrderScreen = () => {
                           onError={onError}
                         ></PayPalButtons>
                       </div>
-                      {/* PAYPAL Payment */}
-                    </div>
-                  )}
-                </ListGroup.Item>
-              )}
+                      */}
+                        {/* PAYPAL Payment */}
+                      </div>
+                    )}
+                  </ListGroup.Item>
+                )}
 
-              {loadingDeliver && <Loader />}
+                {loadingDeliver && <Loader />}
 
+                {userInfo && userInfo.isAdmin && !order.isDelivered && (
+                  <ListGroup.Item>
+                    <Button
+                      type='button'
+                      className='btn btn-block'
+                      onClick={deliverOrderHandler}
+                    >
+                      Mark As Delivered
+                    </Button>
+                  </ListGroup.Item>
+                )}
+                {/*
               {userInfo &&
                 userInfo.isAdmin &&
                 order.isPaid &&
@@ -253,10 +317,23 @@ const OrderScreen = () => {
                     </Button>
                   </ListGroup.Item>
                 )}
-            </ListGroup>
-          </Card>
-        </Col>
-      </Row>
+              */}
+              </ListGroup>
+            </Card>
+          </Col>
+        </Row>
+      </div>
+      <div className='text-center my-3'>
+        {!order.isUpload ? (
+          <button className='btn btn-primary btn-lg' onClick={uploadPermit}>
+            Upload Issuance Directive
+          </button>
+        ) : (
+          <button className='btn btn-primary btn-lg' onClick={downloadPDF}>
+            Download as PDF
+          </button>
+        )}
+      </div>
     </>
   );
 };

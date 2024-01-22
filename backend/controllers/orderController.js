@@ -82,19 +82,20 @@ const getOrderById = asyncHandler(async (req, res) => {
 // @route   PUT /api/orders/:id/pay
 // @access  Private/Admin
 const updateOrderToPaid = asyncHandler(async (req, res) => {
-  const { verified, value } = await verifyPayPalPayment(req.body.id);
-  if (!verified) throw new Error('Payment not verified');
+  // const { verified, value } = await verifyPayPalPayment(req.body.id);
+  // if (!verified) throw new Error('Payment not verified');
 
-  // check if this transaction has been used before
-  const isNewTransaction = await checkIfNewTransaction(Order, req.body.id);
-  if (!isNewTransaction) throw new Error('Transaction has been used before');
+  //// check if this transaction has been used before
+  // const isNewTransaction = await checkIfNewTransaction(Order, req.body.id);
+  // if (!isNewTransaction) throw new Error('Transaction has been used before');
 
+  const value = req.body.id;
   const order = await Order.findById(req.params.id);
 
   if (order) {
-    // check the correct amount was paid
-    const paidCorrectAmount = order.totalPrice.toString() === value;
-    if (!paidCorrectAmount) throw new Error('Incorrect amount paid');
+    //// check the correct amount was paid
+    //const paidCorrectAmount = order.totalPrice.toString() === value;
+    // if (!paidCorrectAmount) throw new Error('Incorrect amount paid');
 
     order.isPaid = true;
     order.paidAt = Date.now();

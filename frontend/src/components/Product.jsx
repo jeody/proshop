@@ -20,10 +20,16 @@ const Product = ({ product }) => {
             text={`${product.numReviews} reviews`}
           />
         </Card.Text>
-        <Card.Text as='h3'>
-          <span>&#8369;</span>
-          {product.price}
+        <Card.Text as='div'>
+          <span>Available Stocks: </span>
+          {product.countInStock.toLocaleString('en-US')}
         </Card.Text>
+        {/*
+        <Card.Text as='h3'>
+          <span>&#8369; </span>
+          {product.price.toLocaleString('en-US')}
+        </Card.Text>
+  */}
       </Card.Body>
     </Card>
   );

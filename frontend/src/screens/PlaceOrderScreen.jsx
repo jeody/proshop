@@ -59,11 +59,13 @@ const PlaceOrderScreen = () => {
               </p>
             </ListGroup.Item>
             {/* Payment Method */}
+            {/* 
             <ListGroup.Item>
               <h2>Payment Method</h2>
               <strong>Method: </strong>
               {cart.paymentMethod}
             </ListGroup.Item>
+             */}
             {/* Payment Method */}
             <ListGroup.Item>
               <h2>Order Items</h2>
@@ -135,7 +137,9 @@ const PlaceOrderScreen = () => {
               <ListGroup.Item>
                 <Row>
                   <Col>Total:</Col>
-                  <Col>$ {cart.totalPrice}</Col>
+                  <Col>
+                    <span>&#8369;</span> {cart.totalPrice}
+                  </Col>
                 </Row>
               </ListGroup.Item>
 

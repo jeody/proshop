@@ -1,4 +1,4 @@
-import { PRODUCTS_URL, UPLOAD_URL } from '../constants';
+import { PRODUCTS_URL, UPLOAD_URL, PRODUCTS_WARE } from '../constants';
 import { apiSlice } from './apiSlice';
 
 export const productApiSlice = apiSlice.injectEndpoints({
@@ -68,6 +68,14 @@ export const productApiSlice = apiSlice.injectEndpoints({
       }),
       keepUnusedDataFor: 5,
     }),
+    getWarehouseProducts: builder.query({
+      query: ({ warehouseNumber, pageNumber }) => ({
+        url: `${PRODUCTS_WARE}`,
+        params: { warehouseNumber, pageNumber },
+      }),
+      providesTags: ['Products'],
+      keepUnusedDataFor: 5,
+    }),
   }),
 });
 
@@ -80,5 +88,6 @@ export const {
   useDeleteProductMutation,
   useCreateReviewMutation,
   useGetTopProductsQuery,
+  useGetWarehouseProductsQuery,
   useGetProductDetailsNameQuery,
 } = productApiSlice;

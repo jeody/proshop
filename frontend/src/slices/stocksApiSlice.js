@@ -4,15 +4,19 @@ import { apiSlice } from './apiSlice';
 export const stocksApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getStocks: builder.query({
-      query: () => ({
+      query: ({ keyword, pageNumber }) => ({
         url: STOCKS_URL,
+        params: {
+          keyword,
+          pageNumber,
+        },
       }),
       providesTags: ['Stocks'],
       keepUnusedDataFor: 5,
     }),
     getStockDetails: builder.query({
       query: (stockId) => ({
-        url: `${STOCKS_URL}/${stockId}`,
+        url: `${STOCKS_URL}/edit/${stockId}`,
       }),
       keepUnusedDataFor: 5,
     }),
@@ -30,8 +34,8 @@ export const stocksApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: ['Stock'],
     }),
     createNewStock: builder.mutation({
-      query: (data) => ({
-        url: `${STOCKS_URL}/${data.stockId}`,
+      query: (stockId) => ({
+        url: `${STOCKS_URL}/${stockId}`,
         method: 'POST',
       }),
       invalidatesTags: ['Stock'],
@@ -51,12 +55,17 @@ export const stocksApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
-    uploadStockExcel: builder.mutation({
-      query: (data) => ({
-        url: `${STOCKS_URL}`,
-        method: 'POST',
-        body: data,
+    getAdminStocks: builder.query({
+      query: ({ userId, keyword, pageNumber }) => ({
+        url: `${STOCKS_URL}/mylist`,
+        params: {
+          userId,
+          keyword,
+          pageNumber,
+        },
       }),
+      providesTags: ['Stocks'],
+      keepUnusedDataFor: 5,
     }),
   }),
 });
@@ -69,5 +78,5 @@ export const {
   useCreateNewStockMutation,
   useUpdateStockMutation,
   useUploadStockImageMutation,
-  useUploadStockExcelMutation,
+  useGetAdminStocksQuery,
 } = stocksApiSlice;

@@ -54,3 +54,7 @@ if (process.argv[2] === '-d') {
 } else {
   importData();
 }
+
+// run node backend/seeder
+// npm run data:import
+// npm run data:destroy

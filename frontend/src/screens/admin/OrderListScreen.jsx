@@ -23,7 +23,7 @@ const OrderListScreen = () => {
               <td>USER</td>
               <td>DATE</td>
               <td>TOTAL</td>
-              <td>POSTED</td>
+              {/* <td>POSTED</td> */}
               <td>ISSUED</td>
               <td></td>
             </tr>
@@ -34,7 +34,14 @@ const OrderListScreen = () => {
                 <td>{order._id}</td>
                 <td>{order.user && order.user.name}</td>
                 <td>{order.createdAt.substring(0, 10)}</td>
-                <td>{order.totalPrice}</td>
+                <td>
+                  <span>&#8369; 0.00</span>
+                  {/*
+                {order.totalPrice.toLocaleString('en-US')}
+          */}
+                </td>
+
+                {/*
                 <td>
                   {order.isPaid ? (
                     order.paidAt.substring(0, 10)
@@ -42,6 +49,7 @@ const OrderListScreen = () => {
                     <FaTimes style={{ color: 'red' }} />
                   )}
                 </td>
+                  */}
                 <td>
                   {order.isDelivered ? (
                     order.deliveredAt.substring(0, 10)

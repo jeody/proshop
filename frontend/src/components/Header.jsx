@@ -77,7 +77,12 @@ const Header = () => {
                 userInfo && userInfo.isManager ? (
                   <>
                     <NavDropdown title={userInfo.name} id='username'>
+                      {/*
                       <LinkContainer to='/stockAdmin/stocklist'>
+                        <NavDropdown.Item>All Stocks</NavDropdown.Item>
+                      </LinkContainer>
+                */}
+                      <LinkContainer to='/stockAdmin/stocklist/mylist'>
                         <NavDropdown.Item>Stocks</NavDropdown.Item>
                       </LinkContainer>
                       <LinkContainer to='/stockAdmin/uploadExcel'>

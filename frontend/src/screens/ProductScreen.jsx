@@ -116,10 +116,12 @@ const ProductScreen = () => {
                     text={`${product.numReviews} reviews`}
                   />
                 </ListGroupItem>
+                {/*
                 <ListGroupItem>
-                  Price: <span>&#8369;</span>
-                  {product.price}
+                  Price: <span>&#8369; </span>
+                  {product.price.toLocaleString('en-US')}
                 </ListGroupItem>
+      */}
                 <ListGroupItem>
                   Description: {product.description}
                 </ListGroupItem>
@@ -128,14 +130,24 @@ const ProductScreen = () => {
             <Col md={3}>
               <Card>
                 <ListGroup variant='flush'>
+                  {/*
                   <ListGroupItem>
                     <Row>
                       <Col>Price:</Col>
                       <Col>
                         <strong>
-                          <span>&#8369;</span>
-                          {product.price}
+                          <span>&#8369; </span>
+                          {product.price.toLocaleString('en-US')}
                         </strong>
+                      </Col>
+                    </Row>
+                  </ListGroupItem>
+    */}
+                  <ListGroupItem>
+                    <Row>
+                      <Col>Available Stocks:</Col>
+                      <Col>
+                        <strong>{product.countInStock}</strong>
                       </Col>
                     </Row>
                   </ListGroupItem>
@@ -155,7 +167,7 @@ const ProductScreen = () => {
                   {product.countInStock > 0 && (
                     <ListGroup.Item>
                       <Row>
-                        <Col>Qty</Col>
+                        <Col>Qty:</Col>
                         <Col>
                           <Form.Control
                             as='select'

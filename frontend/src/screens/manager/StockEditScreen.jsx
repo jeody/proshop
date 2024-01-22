@@ -9,12 +9,9 @@ import {
   useGetStockDetailsQuery,
   useUpdateStockMutation,
   useUploadStockImageMutation,
-  useCreateNewStockMutation,
 } from '../../slices/stocksApiSlice';
-//import { useCreateProductMutation } from '../../slices/productsApiSlice';
 
 const StockEditScreen = () => {
-  //const { data: products } = useGetProductDetailsNameQuery();
   const { id: stockId } = useParams();
 
   const [nomenclature, setNomenclature] = useState('');
@@ -31,13 +28,21 @@ const StockEditScreen = () => {
   const [yearAcquired, setYearAcquired] = useState('');
   const [image, setImage] = useState('');
   const [category, setCategory] = useState('');
+  const [source, setSource] = useState('');
+  const [qtyIssued, setQtyIssued] = useState('0');
+  const [onHand, setOnHand] = useState('0');
+  const [dateIssued, setDateIssued] = useState('');
+  const [requisitioningUnit, setRequisitioningUnit] = useState('');
+  const [authority, setAuthority] = useState('');
+  const [documentNumber, setDocumentNumber] = useState('');
+  const [fsc, setFsc] = useState('0');
+  const [niin, setNiin] = useState('0');
+  const [description, setDescription] = useState('');
+  const [warehouse, setWarehouse] = useState(0);
 
   const { data: stock, isLoading, error } = useGetStockDetailsQuery(stockId);
-  //const [createProduct, { isLoading: loadingCreate }] = useCreateProductMutation();
 
   const [updateStock, { isLoading: loadingUpdate }] = useUpdateStockMutation();
-  const [createNewStock, { isLoading: LoadingNewStock }] =
-    useCreateNewStockMutation();
 
   const [uploadStockImage, { isLoading: loadingUpload }] =
     useUploadStockImageMutation();
@@ -60,6 +65,17 @@ const StockEditScreen = () => {
       setYearAcquired(stock.yearAcquired);
       setImage(stock.image);
       setCategory(stock.category);
+      setSource(stock.source);
+      setQtyIssued(stock.qtyIssued);
+      setOnHand(stock.onHand);
+      setDateIssued(stock.dateIssued);
+      setRequisitioningUnit(stock.requisitioningUnit);
+      setAuthority(stock.authority);
+      setDocumentNumber(stock.documentNumber);
+      setFsc(stock.fsc);
+      setNiin(stock.niin);
+      setDescription(stock.description);
+      setWarehouse(stock.warehouse);
     }
   }, [stock]);
 
@@ -81,16 +97,25 @@ const StockEditScreen = () => {
       yearAcquired,
       image,
       category,
+      source,
+      qtyIssued,
+      onHand,
+      dateIssued,
+      requisitioningUnit,
+      authority,
+      documentNumber,
+      fsc,
+      niin,
+      description,
+      warehouse,
     };
 
     const result = await updateStock(updatedStock);
     if (result.error) {
       toast.error(result.error);
     } else {
-      //CHECK IF ITEM EXIST IN PRODUCTS TABLE
-      await createNewStock(updatedStock);
       toast.success('Stock updated');
-      navigate('/stockAdmin/stocklist');
+      navigate('/stockAdmin/stocklist/mylist');
     }
   };
 
@@ -109,12 +134,11 @@ const StockEditScreen = () => {
 
   return (
     <>
-      <Link to='/stockAdmin/stocklist' className='btn btn-light my-3'>
+      <Link to='/stockAdmin/stocklist/mylist' className='btn btn-light my-3'>
         Go Back
       </Link>
       <FormContainer>
         <h1>Edit Stock</h1>
-
         {loadingUpdate && <Loader />}
 
         {isLoading ? (
@@ -158,7 +182,6 @@ const StockEditScreen = () => {
               ></Form.Control>
             </Form.Group>
 
-            {LoadingNewStock && <Loader />}
             {loadingUpload && <Loader />}
 
             <Form.Group controlId='makeBrand' className='my-2'>
@@ -269,6 +292,123 @@ const StockEditScreen = () => {
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
               ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='source' className='my-2'>
+              <Form.Label>Source</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter source'
+                value={source}
+                onChange={(e) => setSource(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='qtyIssued' className='my-2'>
+              <Form.Label>Quantity Issued</Form.Label>
+              <Form.Control
+                type='number'
+                placeholder='Enter Qty Issued'
+                value={qtyIssued}
+                onChange={(e) => setQtyIssued(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='onHand' className='my-2'>
+              <Form.Label>Quantity On Hand</Form.Label>
+              <Form.Control
+                type='number'
+                placeholder='Enter Qty on Hand'
+                value={onHand}
+                onChange={(e) => setOnHand(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='dateIssued' className='my-2'>
+              <Form.Label>Date Issued</Form.Label>
+              <Form.Control
+                type='date'
+                placeholder='Date Issued'
+                value={dateIssued}
+                onChange={(e) => setDateIssued(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='requisitioningUnit' className='my-2'>
+              <Form.Label>Requisitioning Unit</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter Requisitioning Unit'
+                value={requisitioningUnit}
+                onChange={(e) => setRequisitioningUnit(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='authority' className='my-2'>
+              <Form.Label>Authority</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter Authority'
+                value={authority}
+                onChange={(e) => setAuthority(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='documentNumber' className='my-2'>
+              <Form.Label>Document Number</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter Document Number'
+                value={documentNumber}
+                onChange={(e) => setDocumentNumber(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='fsc' className='my-2'>
+              <Form.Label>FSC</Form.Label>
+              <Form.Control
+                type='number'
+                placeholder='Enter FSC'
+                value={fsc}
+                onChange={(e) => setFsc(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='niin' className='my-2'>
+              <Form.Label>NIIN</Form.Label>
+              <Form.Control
+                type='number'
+                placeholder='NIIN'
+                value={niin}
+                onChange={(e) => setNiin(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='description' className='my-2'>
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter description'
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='warehouse' className='my-2'>
+              <Form.Label>Warehouse</Form.Label>
+              <Form.Control
+                as='select'
+                value={warehouse}
+                onChange={(e) => setWarehouse(Number(e.target.value))}
+              >
+                <option value='0'>Select...</option>
+                <option value='1'>Warehouse 1</option>
+                <option value='2'>Warehouse 2</option>
+                <option value='3'>Warehouse 3</option>
+                <option value='4'>Warehouse 4</option>
+                <option value='5'>Warehouse 5</option>
+                <option value='6'>Warehouse 6</option>
+              </Form.Control>
             </Form.Group>
 
             <Button type='submit' variant='primary' className='my-2'>

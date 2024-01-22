@@ -28,8 +28,11 @@ const ProductCarousel = () => {
             </table>
             <Carousel.Caption className='carousel-caption'>
               <h2>
-                {product.name} (<span>&#8369;</span>
-                {product.price})
+                {product.name}
+                {/*
+                (<span>&#8369; </span>
+                {product.price.toLocaleString('en-US')})
+      */}
               </h2>
             </Carousel.Caption>
           </Link>

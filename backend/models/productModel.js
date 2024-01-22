@@ -29,40 +29,76 @@ const productSchema = mongoose.Schema(
     },
     image: {
       type: String,
-      required: true,
     },
     brand: {
       type: String,
-      required: true,
     },
     category: {
       type: String,
-      required: true,
     },
     description: {
       type: String,
-      required: true,
     },
     reviews: [reviewSchema],
     rating: {
       type: Number,
-      required: true,
-      default: 0,
     },
     numReviews: {
       type: Number,
-      required: true,
-      default: 0,
     },
     price: {
       type: Number,
-      required: true,
-      default: 0,
     },
     countInStock: {
       type: Number,
-      required: true,
-      default: 0,
+    },
+    warehouse: {
+      type: Number,
+    },
+    unitItem: {
+      type: String,
+    },
+    location: {
+      type: String,
+    },
+    qtyIssued: {
+      type: Number,
+    },
+    onHand: {
+      type: Number,
+    },
+    dateIssued: {
+      type: Date,
+    },
+    authority: {
+      type: String,
+    },
+    yearAcquired: {
+      type: Date,
+    },
+    source: {
+      type: String,
+    },
+    partNumber: {
+      type: String,
+    },
+    sparePartOf: {
+      type: String,
+    },
+    fsc: {
+      type: String,
+    },
+    niin: {
+      type: String,
+    },
+    documentNumber: {
+      type: String,
+    },
+    requisitioningUnit: {
+      type: String,
+    },
+    stockId: {
+      type: String,
     },
   },
   {
